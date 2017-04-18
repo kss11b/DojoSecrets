@@ -1,0 +1,39 @@
+<body>
+<% if flash[:errors] %>
+  <% flash[:errors].each do |e| %>
+    <%= e %>
+  <% end %>
+<% end %>
+<h1>My Secrets</h1>
+<a href="/sessions/dash">Secrets Dashboard</a>
+<h3>Create New Secret</h3>
+<form class="" action="/sessions/create_secret" method="post">
+      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+      <input type="hidden" name="secret[user_id]" value="<%=session['current_user']['id']%>">
+      <input type="text" name="secret[content]" value="">
+      <input type="submit" name="" value="Create Secret">
+</form>
+
+<% @secrets.each do |secret| %>
+
+  <% if session['current_user']['id'] == secret.user_id %>
+  <p>***************************************</p>
+    <p><%= secret.content %></p>
+    <form class="" action="/sessions/delete_secret/<%= secret.id %>" method="post">
+            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+      <input type="submit" name="" value="Delete">
+      <p>************************************</p>
+    </form>
+  <% end %>
+<% end %>
+
+
+<% if session['current_user'] %>
+<a href="/sessions/edit/<%=session['current_user']['id']%>">Edit User</a>
+  <form action="/sessions/logout" method="post">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    <input type="submit" value="Log Out">
+  </form>
+<% end %>
+<%= yield %>
+</body>

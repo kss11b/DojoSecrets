@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+
+    <h1>Secrets Dashboard</h1>
+    <a href="/sessions/application">My Secrets</a>
+    <% @secrets.each do |secret| %>
+    <p><%= secret.content %></p>
+
+    <!-- <% if session['current_user']['id'] == secret.user_id %>
+    <form class="" action="/sessions/delete_secret/<%= secret.id %>" method="post">
+      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+      <input type="submit" name="" value="Delete">
+    </form>
+    <% end %> -->
+    <% if secret.liking_users.map(&:id).include? session['current_user']['id'] %>
+    <form class="" action="/likes/destroy/<%=session['current_user']['id'] %>/<%=secret.id %>" method="post">
+      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+      <input type="submit" name="" value="Unlike">
+    </form>
+
+
+    <% end %>
+
+    <% if !secret.liking_users.map(&:id).include? session['current_user']['id'] %>
+      <form class="" action="/likes/create" method="post">
+        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+        <input type="hidden" name="like[user_id]" value="<%=session['current_user']['id']%>">
+        <input type="hidden" name="like[secret_id]" value="<%=secret.id%>">
+        <input type="submit" name="" value="Like">
+      </form>
+    <% end %>
+      <p><%=secret.likes.count%></p>
+      <p>******************************************</p>
+    <% end%>
+  </body>
+  </html>

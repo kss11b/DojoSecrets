@@ -1,0 +1,24 @@
+<body>
+  <h1>New User</h1>
+  <form class="" action="/sessions/create" method="post">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    <label>Name</label>
+    <input type="text" name="user[name]" value="">
+    <label>Email</label>
+    <input type="text" name="user[email]" value="">
+    <label>Password</label>
+    <input type="text" name="user[password]" value="">
+    <label>Password Confirmation</label>
+    <input type="text" name="user[password_confirmation]" value="">
+    <input type="submit" name="" value="Create User">
+  </form>
+  <h1>Login</h1>
+  <form class="" action="/sessions/login" method="post">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    <label>Email</label>
+    <input type="text" name="user[email]">
+    <label>Password</label>
+    <input type="password" name="user[password]">
+    <input type="submit" value="Login">
+  </form>
+</body>
