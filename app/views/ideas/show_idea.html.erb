@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <a href="/ideas/dash">Dashboard</a>
+    <h1><%=@idea.user.alias%> says:</h1>
+    <p><%=@idea.content%></p>
+
+    <h3>People who liked this post:</h3>
+        <% @idea.liking_users.each do |liker| %>
+        <p>Alias: <%=liker.alias%> | Name: <%=liker.name%></p>
+        <%end%>
+  </body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <% if flash[:errors] %>
+      <% flash[:errors].each do |e| %>
+        <%= e %>
+      <% end %>
+    <% end %>
+    <h1> Hello, <%=session['current_user']['name']%></h1>
+    <form action="/ideas/logout" method="post">
+      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+      <input type="submit" value="Logout">
+    </form>
+    <p>******************************</p>
+    <h3>Create New Idea</h3>
+    <form class="" action="/ideas/create_idea" method="post">
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+          <input type="hidden" name="idea[user_id]" value="<%=session['current_user']['id']%>">
+          <input type="text" name="idea[content]" value="">
+          <input type="submit" name="" value="Create Idea">
+    </form>
+    <% @ideas.each do |idea| %>
+    <a href="/ideas/show_user/<%=idea.user_id%>"><%= idea.user.alias%></a>
+    <p><%= idea.content %></p>
+
+    <% if session['current_user']['id'] == idea.user_id %>
+    <form class="" action="/ideas/destroy_idea/<%= idea.id %>" method="post">
+      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+      <input type="submit" name="" value="Delete">
+    </form>
+    <% end %>
+    <% if idea.liking_users.map(&:id).include? session['current_user']['id'] %>
+    <form class="" action="/ideas/destroy_like/<%=session['current_user']['id'] %>/<%=idea.id %>" method="post">
+      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+      <input type="submit" name="" value="Unlike">
+    </form>
+
+
+    <% end %>
+
+    <% if !idea.liking_users.map(&:id).include? session['current_user']['id'] %>
+      <form class="" action="/ideas/create_like" method="post">
+        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+        <input type="hidden" name="like[user_id]" value="<%=session['current_user']['id']%>">
+        <input type="hidden" name="like[idea_id]" value="<%=idea.id%>">
+        <input type="submit" name="" value="Like">
+      </form>
+    <% end %>
+      <a href="/ideas/show_idea/<%=idea.id%>"><%=idea.likes.count%> People Liked This</a>
+      <p>******************************************</p>
+    <% end%>
+  </body>
+  </html>
