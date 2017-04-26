@@ -27,8 +27,10 @@ class IdeasController < ApplicationController
     if params['user']['password'] == ''
           flash[:errors]=["Fill in password field"]
     elsif User.create(user_params).try(:authenticate, params['user']['password'])
-      User.create(user_params)
-      flash[:errors]=["Success"]
+      if User.create(user_params)
+        flash[:errors]=["Success"]
+      else
+        flash[:errors]=["Invalid Create"]
     else
       flash[:errors]=["Invalid Create"]
     end
